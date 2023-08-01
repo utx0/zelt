@@ -5,7 +5,7 @@ import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 
 import {RateLimitedLibrary, RateLimit} from "@src/RateLimitedLibrary.sol";
 
-/// @title abstract contract for putting a rate limit on how fast a contrac
+/// @title abstract contract for putting a rate limit on how fast a contract
 /// can perform an action e.g. Minting
 /// @author Elliot Friedman
 abstract contract RateLimited {
@@ -60,10 +60,18 @@ abstract contract RateLimited {
         rateLimit.replenishBuffer(amount);
     }
 
+    /// @notice function to set rate limit per second
+    /// @dev updates the current buffer and last buffer used time first,
+    /// then sets the new rate limit per second
+    /// @param newRateLimitPerSecond new rate limit per second    
     function _setRateLimitPerSecond(uint128 newRateLimitPerSecond) internal {
         rateLimit.setRateLimitPerSecond(newRateLimitPerSecond);
     }
 
+    /// @notice function to set buffer cap
+    /// @dev updates the current buffer and last buffer used time first,
+    /// then sets the new buffer cap
+    /// @param newBufferCap new buffer cap
     function _setBufferCap(uint128 newBufferCap) internal {
         rateLimit.setBufferCap(newBufferCap);
     }

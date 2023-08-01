@@ -1,19 +1,17 @@
-name: test
+name: Build
 
-on: workflow_dispatch
-
-env:
-  FOUNDRY_PROFILE: ci
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  check:
-    strategy:
-      fail-fast: true
-
-    name: Foundry project
+  build_scripts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout the repository
+        uses: actions/checkout@v2
         with:
           submodules: recursive
 
@@ -22,13 +20,11 @@ jobs:
         with:
           version: nightly
 
-      - name: Run Forge build
-        run: |
-          forge --version
-          forge build --sizes
-        id: build
+      - name: Clean Contracts
+        run: forge clean
 
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+      - name: Compile Contracts
+        run: forge build
+
+      - name: Unit Test Contracts
+        run: forge test -vvv
